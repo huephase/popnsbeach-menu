@@ -1,0 +1,67 @@
+/* Predictable sizing, including generated content. */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	line-height: 1.5;
+}
+
+/* Let component styles control spacing. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
+	margin: 0;
+}
+
+/* Keep media within its container without changing its proportions. */
+img,
+picture,
+video,
+canvas,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+img,
+video {
+	height: auto;
+}
+
+/* Match controls to the surrounding typography; keep native affordances. */
+button,
+input,
+optgroup,
+select,
+textarea {
+	font: inherit;
+	color: inherit;
+}
+
+textarea {
+	resize: vertical;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* Preserve native list markers, link styling, and keyboard focus outlines. */

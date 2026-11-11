@@ -1,0 +1,22 @@
+:root {
+  --color-olive: #5B5C2D;
+  --color-sand: #E8D7AC;
+  --color-sky-blue: #97D4FC;
+  --color-burgundy: #592931;
+  --color-terracotta: #A24640;
+  --color-ivory: #F6F1E8;
+  --color-sage: #BACCC4;
+  --color-gold: #FFD466;
+  --color-pink: #E8A1D9;
+}
+
+body {
+    background-color: var(--color-terracotta);
+}
+
+div#popns_main {
+    width: 90vw;
+    background-color: var(--color-ivory);
+    min-height: 100vh;
+    min-height: 100dvh;
+}

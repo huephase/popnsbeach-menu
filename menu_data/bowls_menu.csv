@@ -1,0 +1,10 @@
+Title,Active,Notes,Category,Price,Allergens,Description,kcal,protein,carbs,fiber,Image
+MED Bowl,TRUE,With your choice of protein,Bowls,48,"D, G, S, N","Cucumber, tomato, feta, roasted peppers, tzatziki, crunchy pita, lemon-basil dressing",,,,,
+SOL Bowl,TRUE,With your choice of protein,Bowls,48,D,"Roasted peppers, tomato, corn, feta, avocado, sol dressing",,,,,
+ZEN Bowl,TRUE,With your choice of protein,Bowls,48,"G, S","Edamame, gochujang slaw, cucumber, broccolini, miso-tahini dressing",,,,,
+Lettuce,TRUE,,Bowls Base,,,,,,,,
+Brown Rice,TRUE,,Bowls Base,,,,130 kcal,,,,
+Orzo,TRUE,,Bowls Base,,,,180 kcal,,,,
+Beef Striploin,TRUE,per 100 grams,Extra protein,25,,Grass-fed Australian striploin,220 kcal,27 p,,,
+Chicken Breast,TRUE,per 100 grams,Extra protein,15,,Organic chicken breast,165 kcal,31 p,,,
+Salmon,TRUE,per 100 grams,Extra protein,25,,Fresh Atlantic salmon,206 kcal,22 p,,,
