@@ -8,15 +8,207 @@
   --color-sage: #BACCC4;
   --color-gold: #FFD466;
   --color-pink: #E8A1D9;
+  --font-family-base: 'Archivo', sans-serif;
+  --font-size-nav: 24px;
+
+  --space: 10px;
+
+  --size-control: 44px;
+  --size-menu-toggle: 40px;
+  --width-main: 90vw;
+  --width-menu: 320px;
+  --width-menu-max: 85vw;
+
+  --color-backdrop: rgb(0 0 0 / 35%);
+  --duration-menu: 250ms;
+  --easing-menu: ease;
+  --text-underline-offset: 6px;
 }
 
 body {
-    background-color: var(--color-terracotta);
+    background-color: var(--color-ivory);
+    font-family: var(--font-family-base);
+    line-height: 1;
+}
+
+h1 {
+    font-weight: 100;
+}
+h2{
+    font-weight: 100;
+    font-size: 2rem;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.15rem;
+    padding-left: calc(var(--space) * 2);
+}
+
+p{
+    font-size: 0.8rem;
+}
+
+.page_title {
+    padding: 20px calc(var(--space) * 2) 60px;
+}
+.page_title h1 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-terracotta);
 }
 
 div#popns_main {
-    width: 90vw;
+    width: 100%;
     background-color: var(--color-ivory);
     min-height: 100vh;
     min-height: 100dvh;
+}
+
+.popns_header {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--space) * 1.5);
+    padding: calc(var(--space) * 1.5);
+    margin-top: calc(var(--space) * 2);
+    padding-right: calc(var(--space) * 4);
+    width: 100%;
+    justify-content: space-between;
+}
+
+.popns_menu_toggle,
+.popns_menu_close {
+    display: grid;
+    place-items: center;
+    width: var(--size-control);
+    height: var(--size-control);
+    padding: var(--space);
+    border: 0;
+    background: transparent;
+    color: var(--color-burgundy);
+    cursor: pointer;
+}
+
+.popns_menu_toggle {
+    flex-shrink: 0;
+    width: var(--size-menu-toggle);
+    height: var(--size-menu-toggle);
+    padding: 0;
+}
+
+.popns_menu_toggle svg {
+    width: 100%;
+    height: 100%;
+}
+
+.popns_menu {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(var(--width-menu), var(--width-menu-max));
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: calc(var(--space) * 2);
+    border: 0;
+    background: var(--color-ivory);
+    color: var(--color-burgundy);
+    transform: translateX(-100%);
+    transition: transform var(--duration-menu) var(--easing-menu);
+}
+
+.popns_menu.is-open {
+    transform: translateX(0);
+}
+
+.popns_menu::backdrop {
+    background: var(--color-backdrop);
+    opacity: 0;
+    transition: opacity var(--duration-menu) var(--easing-menu);
+}
+
+.popns_menu.is-open::backdrop {
+    opacity: 1;
+}
+
+.popns_menu_close {
+    margin-left: auto;
+}
+
+.popns_nav ul {
+    display: grid;
+    gap: calc(var(--space) * 2);
+    margin: calc(var(--space) * 3) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.popns_nav a {
+    display: block;
+    color: inherit;
+    font-size: var(--font-size-nav);
+    text-decoration: none;
+}
+
+.popns_nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: var(--text-underline-offset);
+}
+
+body.popns_menu_open {
+    overflow: hidden;
+}
+
+.popns_menu_section {
+    padding-right: calc(var(--space) * 4);
+}
+.section_pattern {
+    display: flex;
+    align-items: end;
+}
+
+.popns_pattern img {
+    width: 50px;
+    height: 100px;
+}
+
+.menu_container{
+    padding-left: calc(var(--space) * 7);
+}
+
+.nutrition {
+    display: grid;
+    font-size: 0.8rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+    grid-auto-flow: column;
+    margin: calc(var(--space) * 2) 0;
+    text-align: left;
+}
+
+.nutrition dt,
+.nutrition dd {
+    overflow-wrap: anywhere;
+}
+
+.nutrition dt {
+    font-weight: 600;
+    margin: calc(var(--space) * 0.5) 0;
+    border-bottom: 1px solid var(--color-terracotta);
+}
+
+.menu_container img{
+   margin: calc(var(--space) * 2) 0;
+}
+
+div.item_title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .popns_menu,
+    .popns_menu::backdrop {
+        transition: none;
+    }
 }
