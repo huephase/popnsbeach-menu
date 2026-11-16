@@ -1,0 +1,18 @@
+services:
+  myapp:
+    image: nginx:alpine
+    restart: unless-stopped
+    networks:
+      - traefik-public
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.myapp.rule=Host(`popnsbeach.com`)"
+      - "traefik.http.routers.myapp.entrypoints=websecure"
+      - "traefik.http.routers.myapp.tls.certresolver=letsencrypt"
+      - "traefik.http.services.myapp.loadbalancer.server.port=80"
+
+networks:
+  traefik-public:
+    external: true
