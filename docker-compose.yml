@@ -8,10 +8,10 @@ services:
       - "80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.myapp.rule=Host(`popnsbeach.com`)"
-      - "traefik.http.routers.myapp.entrypoints=websecure"
-      - "traefik.http.routers.myapp.tls.certresolver=letsencrypt"
-      - "traefik.http.services.myapp.loadbalancer.server.port=80"
+      - "traefik.http.routers.popnsbeach-menu.rule=Host(`popnsbeach.com`) || Host(`www.popnsbeach.com`)"
+      - "traefik.http.routers.popnsbeach-menu.entrypoints=websecure"
+      - "traefik.http.routers.popnsbeach-menu.tls.certresolver=letsencrypt"
+      - "traefik.http.services.popnsbeach-menu.loadbalancer.server.port=80"
 
 networks:
   traefik-public:
