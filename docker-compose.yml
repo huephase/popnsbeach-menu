@@ -6,6 +6,10 @@ services:
       - traefik-public
     expose:
       - "80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./assets:/usr/share/nginx/html/assets:ro
+      - ./menu_imgs:/usr/share/nginx/html/menu_imgs:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.popnsbeach-menu.rule=Host(`popnsbeach.com`) || Host(`www.popnsbeach.com`)"
