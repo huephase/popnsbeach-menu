@@ -1,5 +1,6 @@
 :root {
   --color-olive: #5B5C2D;
+  --color-icons: #454c1f;
   --color-sand: #E8D7AC;
   --color-sky-blue: #97D4FC;
   --color-burgundy: #592931;
@@ -8,6 +9,7 @@
   --color-sage: #BACCC4;
   --color-gold: #FFD466;
   --color-pink: #E8A1D9;
+  --text-color: #555555;
   --font-family-base: 'Archivo', sans-serif;
   --font-size-nav: 24px;
 
@@ -28,7 +30,12 @@
 body {
     background-color: var(--color-ivory);
     font-family: var(--font-family-base);
+    color: var(--text-color);
     line-height: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
 }
 
 h1 {
@@ -45,10 +52,12 @@ h2{
 
 p{
     font-size: 0.8rem;
+    color: var(--text-color);
+    font: var(--font-family-base);
 }
 
 .page_title {
-    padding: 20px calc(var(--space) * 2) 60px;
+    padding: 20px calc(var(--space) * 2) 30px;
 }
 .page_title h1 {
     font-size: 1rem;
@@ -204,6 +213,59 @@ div.item_title {
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--space);
+}
+
+#tabs {
+    margin: 0 calc(var(--space) * 2);
+    display: flex;
+    gap: var(--space);
+    overflow-x: auto;
+    margin-bottom: calc(var(--space) * 3);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+#tabs::-webkit-scrollbar {
+    display: none;
+}
+#tabs > .tab {
+    flex: 0 0 60px;
+    scroll-snap-align: start;
+    text-align: center;
+}
+
+#tabs > .tab p {
+    font-size: 0.6rem;
+    letter-spacing: -0.05rem;
+    font-weight: 300;
+    color: var(--color-icons);
+    text-transform: uppercase;
+}
+
+#tabs div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#tabs div .tab_icon{
+    margin-bottom: calc(var(--space) * 0.5);
+}
+
+#tabs div .tab_icon img{
+    display: block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#tabs.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
+#tabs.is-dragging img {
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
