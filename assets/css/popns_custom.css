@@ -32,6 +32,7 @@ body {
     font-family: var(--font-family-base);
     color: var(--text-color);
     line-height: 1;
+    margin-bottom: 100px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -54,6 +55,12 @@ p{
     font-size: 0.8rem;
     color: var(--text-color);
     font: var(--font-family-base);
+}
+
+p.allergens {
+    font-size: 12px;
+    margin: 10px 0;
+    font-weight: 300;
 }
 
 .page_title {
@@ -182,6 +189,17 @@ body.popns_menu_open {
 
 .menu_container{
     padding-left: calc(var(--space) * 7);
+    padding-right: calc(var(--space) * 4);
+}
+
+.bowl_option_heading {
+    margin: calc(var(--space) * 7) 0 calc(var(--space) * 3);
+    padding-left: calc(var(--space) * 7);
+    text-transform: uppercase;
+    font-weight: 100;
+    font-size: 2rem;
+    letter-spacing: -0.15rem;
+    color: var(--color-olive);
 }
 
 .nutrition {
@@ -209,6 +227,10 @@ body.popns_menu_open {
    margin: calc(var(--space) * 2) 0;
 }
 
+.price::after {
+    content: " AED";
+}
+
 div.item_title {
     display: flex;
     justify-content: space-between;
@@ -228,35 +250,45 @@ div.item_title {
     display: none;
 }
 #tabs > .tab {
-    flex: 0 0 60px;
-    scroll-snap-align: start;
-    text-align: center;
-}
-
-#tabs > .tab p {
-    font-size: 0.6rem;
-    letter-spacing: -0.05rem;
-    font-weight: 300;
-    color: var(--color-icons);
-    text-transform: uppercase;
-}
-
-#tabs div{
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 0 0 60px;
+    scroll-snap-align: start;
+    text-align: center;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
 }
 
-#tabs div .tab_icon{
+#tabs > .tab[aria-selected="true"] .tab_label {
+    color: var(--color-terracotta);
+    font-weight: 700;
+}
+
+#tabs .tab_icon {
     margin-bottom: calc(var(--space) * 0.5);
 }
 
-#tabs div .tab_icon img{
+#tabs .tab_icon img {
     display: block;
     width: 60px;
     height: 60px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+#menu-content [hidden] {
+    display: none;
+}
+
+#tabs > .tab .tab_label {
+    font-size: 0.6rem;
+    letter-spacing: -0.05rem;
+    font-weight: 300;
+    color: var(--color-icons);
+    text-transform: uppercase;
 }
 
 #tabs.is-dragging {
@@ -266,6 +298,10 @@ div.item_title {
 
 #tabs.is-dragging img {
     pointer-events: none;
+}
+
+#menu-panel-3-bowls .section_pattern {
+    margin-bottom: 50px;
 }
 
 @media (prefers-reduced-motion: reduce) {

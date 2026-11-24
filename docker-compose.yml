@@ -10,6 +10,7 @@ services:
       - ./index.html:/usr/share/nginx/html/index.html:ro
       - ./assets:/usr/share/nginx/html/assets:ro
       - ./menu_imgs:/usr/share/nginx/html/menu_imgs:ro
+      - ./menu_data:/usr/share/nginx/html/menu_data:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.popnsbeach-menu.rule=Host(`popnsbeach.com`) || Host(`www.popnsbeach.com`)"

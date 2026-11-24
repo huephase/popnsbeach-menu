@@ -81,7 +81,7 @@ Fresh Juices,This tab covers Fresh Juices,TRUE
 - Traverse active tab rows in file order. Match `CATEGORY` against the same column in either `main_menu.csv` or `bowls_menu.csv`, using exact, case-sensitive equality after trimming surrounding whitespace.
 - Skip and ignore any tab category with no matching entries in either menu file. Do not render a placeholder tab or treat this as an error.
 - Only active menu items appear. If a matching category contains no active valid items, omit its tab to avoid an empty panel.
-- Menu categories absent from the active tab configuration do not automatically create tabs. In particular, `Bowls Base` and `Extra PROTEIN` do not create additional index tabs; any use as bowl options requires a separate explicit rendering rule.
+- Menu categories absent from the active tab configuration do not automatically create tabs. Categories in `bowls_menu.csv` that have no active tab are rendered as grouped subsections inside the `Bowls` tab, rather than as additional tabs.
 - Render each category at most once; retain the first active occurrence if the tab file contains duplicate categories and report the duplicate in development diagnostics.
 - Select the first eligible tab initially. Switching tabs displays the corresponding category panel without refetching CSV data or reloading the page.
 - Use accessible tab controls with `tablist`, `tab`, and `tabpanel` semantics, correct selected state and panel associations, and arrow-key/Home/End navigation. Keep all tabs reachable on narrow screens without adding another media query.
@@ -134,6 +134,7 @@ Show all eligible matching categories without a fixed tab count. The current CSV
 - `FALSE` items are hidden; empty optional fields leave no empty UI labels or broken images.
 - Tab labels and order follow `tabs_order.csv`; matching items from both menu files appear under the correct tab, preserving the defined item order.
 - Unmatched tab categories are skipped. Adding or removing eligible categories updates the tab count automatically.
+- Active `bowls_menu.csv` categories without their own tab are grouped under `Bowls` and do not create additional tabs.
 - Inactive tabs, categories containing only inactive items, and duplicate tab rows follow the filtering rules. Menu categories not listed in the active tab configuration do not create tabs.
 - The first eligible tab is selected on load; keyboard and pointer tab switching work without refetching data. No eligible tabs produces the empty-menu state.
 - CSV parsing handles quoted commas, escaped quotes, multiline fields, BOM, and both common line endings. Invalid headers and rows produce the intended error behavior.
