@@ -169,15 +169,7 @@ function renderItem(item) {
         image.width = 1000;
         image.height = 1000;
         image.loading = 'lazy';
-        let usingPlaceholder = false;
-        image.addEventListener('error', () => {
-            if (usingPlaceholder) {
-                image.remove();
-                return;
-            }
-            usingPlaceholder = true;
-            image.src = 'menu_imgs/popns_placeholder.jpg';
-        });
+        image.addEventListener('error', () => image.remove());
         image.src = `menu_imgs/${encodeURIComponent(item.image)}`;
         container.append(image);
     }
@@ -187,9 +179,10 @@ function renderItem(item) {
     addText(title, 'h4', '', item.title);
     addText(title, 'h4', 'price', item.numbers.PRICE);
     container.append(title);
-    addText(container, 'p', 'notes', item.notes);
     addText(container, 'p', 'description', item.description);
+    addText(container, 'p', 'popns_notes', item.notes);
     addText(container, 'p', 'allergens', item.allergens ? `Allergens: ${item.allergens}` : '');
+
 
     const nutrition = ['KCAL', 'PROTEIN', 'CARBS', 'FAT', 'FIBER']
         .filter((field) => item.numbers[field]);

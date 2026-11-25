@@ -51,16 +51,36 @@ h2{
     padding-left: calc(var(--space) * 2);
 }
 
-p{
-    font-size: 0.8rem;
+h4 {
+    color: var(--color-terracotta);
+}
+
+p {
     color: var(--text-color);
-    font: var(--font-family-base);
+    font-family: var(--font-family-base);
+    font-size: 0.8rem;
 }
 
 p.allergens {
+    position: relative;
+    isolation: isolate;
+    width: fit-content;
     font-size: 12px;
     margin: 10px 0;
+    padding: 2px 4px;
     font-weight: 300;
+    color: black;
+}
+
+p.allergens::before {
+    content: "";
+    position: absolute;
+    inset: 0 2px;
+    z-index: -1;
+    background: var(--color-sage);
+    transform: translateY(4px) rotate(-3deg);
+    opacity: 0.5;
+    box-shadow: 3px 3px 0 var(--color-sand);
 }
 
 .page_title {
@@ -180,6 +200,7 @@ body.popns_menu_open {
 .section_pattern {
     display: flex;
     align-items: end;
+    margin-bottom: 50px;
 }
 
 .popns_pattern img {
@@ -190,6 +211,7 @@ body.popns_menu_open {
 .menu_container{
     padding-left: calc(var(--space) * 7);
     padding-right: calc(var(--space) * 4);
+    margin-bottom: 60px;
 }
 
 .bowl_option_heading {
@@ -224,7 +246,7 @@ body.popns_menu_open {
 }
 
 .menu_container img{
-   margin: calc(var(--space) * 2) 0;
+   margin: 0 0 calc(var(--space) * 2);
 }
 
 .price::after {
@@ -235,6 +257,14 @@ div.item_title {
     display: flex;
     justify-content: space-between;
     margin-bottom: var(--space);
+}
+
+div.item_title h4{
+    flex-basis: 76%;
+}
+div.item_title h4.price{
+    flex-basis: 24%;
+    text-align: right;
 }
 
 #tabs {
@@ -300,8 +330,14 @@ div.item_title {
     pointer-events: none;
 }
 
-#menu-panel-3-bowls .section_pattern {
-    margin-bottom: 50px;
+p.popns_notes {
+    font-family: "Oooh Baby", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.2rem;
+    margin: 10px 0 0;
+    display: inline-block;
+    color: var(--color-terracotta);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,7 +1,7 @@
 TITLE,ACTIVE,NOTES,CATEGORY,PRICE,ALLERGENS,DESCRIPTION,KCAL,PROTEIN,CARBS,FAT,IMAGE
-MED Bowl,TRUE,With your choice of protein,Bowls,48,"D, G, S, N","Cucumber, tomato, feta, roasted peppers, tzatziki, crunchy pita, lemon-basil dressing",350 kcal,30 p,60 c,10 f,
-SOL Bowl,TRUE,With your choice of protein,Bowls,48,D,"Roasted peppers, tomato, corn, feta, avocado, sol dressing",350 kcal,30 p,60 c,10 f,
-ZEN Bowl,TRUE,With your choice of protein,Bowls,48,"G, S","Edamame, gochujang slaw, cucumber, broccolini, miso-tahini dressing",350 kcal,30 p,60 c,10 f,
+MED Bowl,TRUE,With your choice of protein,Bowls,48,"Dairy, Gluten, Nuts, Sesame","Cucumber, tomato, feta, roasted peppers, tzatziki, crunchy pita, lemon-basil dressing",350 kcal,30 p,60 c,10 f,
+SOL Bowl,TRUE,With your choice of protein,Bowls,48,Dairy,"Roasted peppers, tomato, corn, feta, avocado, sol dressing",350 kcal,30 p,60 c,10 f,
+ZEN Bowl,TRUE,With your choice of protein,Bowls,48,"Gluten, Sesame","Edamame, gochujang slaw, cucumber, broccolini, miso-tahini dressing",350 kcal,30 p,60 c,10 f,
 Lettuce,TRUE,,Bowls Base,0,,Fresh gem lettuce,050 kcal,01 p,01 c,01 f,
 Brown Rice,TRUE,,Bowls Base,0,,Wholegrain brown jasmine rice,130 kcal,03 p,50 c,05 f,
 Orzo,TRUE,,Bowls Base,0,,Fresh prepared orzo pasta,180 kcal,03 p,50 c,05 f,
