@@ -2,7 +2,7 @@
   --color-olive: #5B5C2D;
   --color-icons: #454c1f;
   --color-sand: #E8D7AC;
-  --color-sky-blue: #97D4FC;
+  --color-blue: #679dbf;
   --color-burgundy: #592931;
   --color-terracotta: #A24640;
   --color-ivory: #F6F1E8;
@@ -214,14 +214,17 @@ body.popns_menu_open {
     margin-bottom: 60px;
 }
 
-.bowl_option_heading {
-    margin: calc(var(--space) * 7) 0 calc(var(--space) * 3);
+.menu_subcategory_heading {
+    margin: calc(var(--space) * 2) 0 calc(var(--space) * 3);
     padding-left: calc(var(--space) * 7);
     text-transform: uppercase;
-    font-weight: 100;
-    font-size: 2rem;
-    letter-spacing: -0.15rem;
-    color: var(--color-olive);
+    font-weight: 200;
+    font-size: 1rem;
+    color: var(--color-blue);
+    letter-spacing: -0.08rem;
+    position: absolute;
+    left: 0;
+    transform: translateY(50px) translateX(-30px) rotate(-90deg);
 }
 
 .nutrition {

@@ -104,13 +104,21 @@ function readMenuItems(text, source) {
     const rows = readCsv(text, ['TITLE', 'ACTIVE', 'CATEGORY'], source);
     const items = [];
     let invalidCount = 0;
+    let currentCategory = '';
 
     rows.forEach((row, index) => {
+        if (row.DESCRIPTION?.trim().toUpperCase() === 'PAGE TITLE' && row.CATEGORY.trim()) {
+            currentCategory = row.CATEGORY.trim();
+            return;
+        }
+
         try {
             const item = {
                 title: row.TITLE.trim(),
                 active: parseActive(row.ACTIVE),
-                category: row.CATEGORY.trim(),
+                category: row.CATEGORY.trim() || currentCategory,
+                categoryFromSection: Boolean(currentCategory),
+                subCategory: row['SUB-CATEGORY'] || '',
                 notes: row.NOTES || '',
                 allergens: row.ALLERGENS || '',
                 description: row.DESCRIPTION || '',
@@ -159,6 +167,16 @@ function addText(parent, tag, className, value) {
     return element;
 }
 
+function groupItems(items, getGroupName) {
+    const groups = new Map();
+    items.forEach((item) => {
+        const name = getGroupName(item);
+        if (!groups.has(name)) groups.set(name, []);
+        groups.get(name).push(item);
+    });
+    return [...groups].map(([name, groupedItems]) => ({ name, items: groupedItems }));
+}
+
 function renderItem(item) {
     const container = document.createElement('article');
     container.className = 'menu_container';
@@ -199,6 +217,13 @@ function renderItem(item) {
     return container;
 }
 
+function renderGroupedItems(parent, items, getGroupName) {
+    groupItems(items, getGroupName).forEach(({ name, items: groupedItems }) => {
+        if (name) addText(parent, 'h3', 'menu_subcategory_heading', name);
+        groupedItems.forEach((item) => parent.append(renderItem(item)));
+    });
+}
+
 function selectTab(tab) {
     tabList.querySelectorAll('[role="tab"]').forEach((button) => {
         const selected = button === tab;
@@ -228,6 +253,11 @@ function handleTabKeydown(event) {
 function renderMenu(tabRows, mainItems, bowlItems) {
     const seenCategories = new Set();
     const categories = [];
+    const itemsByCategory = new Map(
+        groupItems([...mainItems, ...bowlItems], (item) => item.category)
+            .map(({ name, items }) => [name, items])
+    );
+
     tabRows.forEach((row, index) => {
         try {
             if (!parseActive(row.ACTIVE)) return;
@@ -238,15 +268,35 @@ function renderMenu(tabRows, mainItems, bowlItems) {
                 return;
             }
             seenCategories.add(category);
-            const items = [
-                ...mainItems.filter((item) => item.category === category),
-                ...bowlItems.filter((item) => item.category === category)
-            ];
+            const items = itemsByCategory.get(category) || [];
             if (items.length) categories.push({ category, items });
         } catch (error) {
             console.warn(`tabs_order.csv: skipped invalid row ${index + 2}: ${error.message}`);
         }
     });
+
+    mainItems.forEach((item) => {
+        if (seenCategories.has(item.category)) return;
+        seenCategories.add(item.category);
+        categories.push({
+            category: item.category,
+            items: itemsByCategory.get(item.category)
+        });
+    });
+
+    const sectionCategories = groupItems(
+        mainItems.filter((item) => item.categoryFromSection),
+        (item) => item.category
+    ).map(({ name }) => name);
+    if (sectionCategories.length) {
+        categories.sort((left, right) => {
+            const leftIndex = sectionCategories.indexOf(left.category);
+            const rightIndex = sectionCategories.indexOf(right.category);
+            if (leftIndex < 0) return rightIndex < 0 ? 0 : 1;
+            if (rightIndex < 0) return -1;
+            return leftIndex - rightIndex;
+        });
+    }
 
     tabList.replaceChildren();
     menuContent.replaceChildren();
@@ -257,16 +307,7 @@ function renderMenu(tabRows, mainItems, bowlItems) {
     }
 
     const visibleCategories = new Set(categories.map(({ category }) => category));
-    const bowlOptionGroups = [];
-    bowlItems.forEach((item) => {
-        if (visibleCategories.has(item.category)) return;
-        let group = bowlOptionGroups.find(({ category }) => category === item.category);
-        if (!group) {
-            group = { category: item.category, items: [] };
-            bowlOptionGroups.push(group);
-        }
-        group.items.push(item);
-    });
+    const bowlOptionItems = bowlItems.filter((item) => !visibleCategories.has(item.category));
 
     categories.forEach(({ category, items }, index) => {
         const tabId = `menu-tab-${index}-${slugify(category)}`;
@@ -314,12 +355,9 @@ function renderMenu(tabRows, mainItems, bowlItems) {
         heading.append(pattern);
         addText(heading, 'h2', '', category);
         panel.append(heading);
-        items.forEach((item) => panel.append(renderItem(item)));
+        renderGroupedItems(panel, items, (item) => item.subCategory);
         if (category === 'Bowls') {
-            bowlOptionGroups.forEach(({ category: groupCategory, items: groupItems }) => {
-                addText(panel, 'h3', 'bowl_option_heading', groupCategory);
-                groupItems.forEach((item) => panel.append(renderItem(item)));
-            });
+            renderGroupedItems(panel, bowlOptionItems, (item) => item.category);
         }
         menuContent.append(panel);
     });

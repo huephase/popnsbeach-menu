@@ -37,19 +37,23 @@ The source entry point may be named `index.html`; visitors access it through `/`
 
 ## CSV contract
 
-Use UTF-8 CSV. Both `main_menu.csv` and `bowls_menu.csv` use this exact header and column order:
+Use UTF-8 CSV. `main_menu.csv` uses this header and column order (older files without `SUB-CATEGORY` remain supported):
 
 ```csv
-TITLE,ACTIVE,NOTES,CATEGORY,PRICE,ALLERGENS,DESCRIPTION,KCAL,PROTEIN,CARBS,FAT,IMAGE
-Tropical Supply,TRUE,,smoothie,50,,"Mango, peach, passion fruit, pineapple, strawberry & coconut water",245 KCAL,04 p,60 c,02 f,tropical_supply.jpg
+TITLE,ACTIVE,NOTES,CATEGORY,SUB-CATEGORY,PRICE,ALLERGENS,DESCRIPTION,KCAL,PROTEIN,CARBS,FAT,IMAGE
+DRINKS CATEGORY,,,DRINKS,,,,PAGE TITLE,,,,,
+Tropical Supply,TRUE,,,Fresh Blends,50,,"Mango, peach, passion fruit, pineapple, strawberry & coconut water",245 KCAL,04 p,60 c,02 f,tropical_supply.jpg
 ```
+
+`bowls_menu.csv` keeps its existing schema without `SUB-CATEGORY`.
 
 | Column | Rule |
 | --- | --- |
 | `TITLE` | Required, nonempty item name. |
 | `ACTIVE` | Required boolean, `TRUE` or `FALSE`. Only `TRUE` items appear publicly. Trim whitespace and accept case variations when parsing. |
 | `NOTES` | Optional plain-text note. Omit its UI when empty. |
-| `CATEGORY` | Required, nonempty category identifier, such as `smoothie`. |
+| `CATEGORY` | The top-level tab/category. In `main_menu.csv`, a `DESCRIPTION` value of `PAGE TITLE` marks a category row; its `CATEGORY` applies to following items until the next marker. Otherwise, an item's own `CATEGORY` is used. |
+| `SUB-CATEGORY` | Optional main-menu grouping shown as a heading inside its `CATEGORY` tab. |
 | `PRICE` | Optional nonnegative integer, normalized from the leading digits as described below. Omit its UI when empty. |
 | `ALLERGENS` | Optional plain text. An empty value means no information was supplied; do not label it allergen-free. Omit its UI when empty. |
 | `DESCRIPTION` | Optional plain-text description. Quote values containing commas, quotes, or line breaks. Omit its UI when empty. |
@@ -78,16 +82,17 @@ Fresh Juices,This tab covers Fresh Juices,TRUE
 ```
 
 - `CATEGORY` supplies both the matching key and the visible tab label. `DESCRIPTION` is optional supporting text, not the tab label. `ACTIVE` uses the same boolean rules as the menu files; inactive tab rows are ignored.
-- Traverse active tab rows in file order. Match `CATEGORY` against the same column in either `main_menu.csv` or `bowls_menu.csv`, using exact, case-sensitive equality after trimming surrounding whitespace.
+- Traverse active tab rows in file order. Match `CATEGORY` against the top-level category in either menu file, using exact, case-sensitive equality after trimming surrounding whitespace.
 - Skip and ignore any tab category with no matching entries in either menu file. Do not render a placeholder tab or treat this as an error.
 - Only active menu items appear. If a matching category contains no active valid items, omit its tab to avoid an empty panel.
-- Menu categories absent from the active tab configuration do not automatically create tabs. Categories in `bowls_menu.csv` that have no active tab are rendered as grouped subsections inside the `Bowls` tab, rather than as additional tabs.
+- When `main_menu.csv` uses category marker rows, its top-level categories are shown first in marker order, even if `tabs_order.csv` has not yet been updated; other matching configured categories follow in tab-file order. Without marker rows, tab order continues to follow `tabs_order.csv`, and unlisted main-menu categories are appended in first-seen CSV order.
+- Categories in `bowls_menu.csv` that have no active tab are rendered as grouped subsections inside the `Bowls` tab, rather than as additional tabs.
 - Render each category at most once; retain the first active occurrence if the tab file contains duplicate categories and report the duplicate in development diagnostics.
 - Select the first eligible tab initially. Switching tabs displays the corresponding category panel without refetching CSV data or reloading the page.
 - Use accessible tab controls with `tablist`, `tab`, and `tabpanel` semantics, correct selected state and panel associations, and arrow-key/Home/End navigation. Keep all tabs reachable on narrow screens without adding another media query.
 - If no tabs qualify, show the empty-menu state. A missing or invalid tab configuration must show a load-failure state rather than silently inventing a tab order.
 
-Show all eligible matching categories without a fixed tab count. The current CSV files yield **10 tabs**, in this order: Fresh Blends, Fresh Juices, Breakfast, Bowls, Snacks, Sandwiches, Desserts, Coffee, Matcha, Water. The tab count changes automatically as CSV content and active flags change.
+Render each non-empty `SUB-CATEGORY` as a heading within its top-level category tab. The tab count changes automatically as CSV content and active flags change.
 
 ## Extensionless URLs
 
