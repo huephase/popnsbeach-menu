@@ -214,17 +214,27 @@ body.popns_menu_open {
     margin-bottom: 60px;
 }
 
+.menu_subcategory {
+    position: relative;
+    display: flow-root;
+}
+
 .menu_subcategory_heading {
-    margin: calc(var(--space) * 2) 0 calc(var(--space) * 3);
-    padding-left: calc(var(--space) * 7);
-    text-transform: uppercase;
-    font-weight: 200;
-    font-size: 1rem;
-    color: var(--color-blue);
-    letter-spacing: -0.08rem;
     position: absolute;
-    left: 0;
-    transform: translateY(50px) translateX(-30px) rotate(-90deg);
+    top: 0;
+    right: calc(100% - 30px);
+    margin: 0;
+    padding: 0 6px;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: .7rem;
+    color: var(--color-blue);
+    letter-spacing: -0.01rem;
+    white-space: nowrap;
+    transform: rotate(-90deg);
+    transform-origin: top right;
+    border-bottom: 1px solid;
+    border-style: double;
 }
 
 .nutrition {

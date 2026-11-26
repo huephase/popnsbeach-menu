@@ -117,7 +117,6 @@ function readMenuItems(text, source) {
                 title: row.TITLE.trim(),
                 active: parseActive(row.ACTIVE),
                 category: row.CATEGORY.trim() || currentCategory,
-                categoryFromSection: Boolean(currentCategory),
                 subCategory: row['SUB-CATEGORY'] || '',
                 notes: row.NOTES || '',
                 allergens: row.ALLERGENS || '',
@@ -145,6 +144,10 @@ function readMenuItems(text, source) {
 
 function slugify(value) {
     return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'category';
+}
+
+function normalizeCategory(value) {
+    return value.trim().toLowerCase();
 }
 
 function imageFilenameFromTitle(title) {
@@ -219,8 +222,13 @@ function renderItem(item) {
 
 function renderGroupedItems(parent, items, getGroupName) {
     groupItems(items, getGroupName).forEach(({ name, items: groupedItems }) => {
-        if (name) addText(parent, 'h3', 'menu_subcategory_heading', name);
-        groupedItems.forEach((item) => parent.append(renderItem(item)));
+        const group = name ? document.createElement('div') : parent;
+        if (name) {
+            group.className = 'menu_subcategory';
+            addText(group, 'h3', 'menu_subcategory_heading', name);
+        }
+        groupedItems.forEach((item) => group.append(renderItem(item)));
+        if (name) parent.append(group);
     });
 }
 
@@ -254,7 +262,7 @@ function renderMenu(tabRows, mainItems, bowlItems) {
     const seenCategories = new Set();
     const categories = [];
     const itemsByCategory = new Map(
-        groupItems([...mainItems, ...bowlItems], (item) => item.category)
+        groupItems([...mainItems, ...bowlItems], (item) => normalizeCategory(item.category))
             .map(({ name, items }) => [name, items])
     );
 
@@ -263,40 +271,18 @@ function renderMenu(tabRows, mainItems, bowlItems) {
             if (!parseActive(row.ACTIVE)) return;
             const category = row.CATEGORY.trim();
             if (!category) throw new Error('CATEGORY is required.');
-            if (seenCategories.has(category)) {
+            const categoryKey = normalizeCategory(category);
+            if (seenCategories.has(categoryKey)) {
                 console.warn(`tabs_order.csv: ignored duplicate category "${category}" on row ${index + 2}.`);
                 return;
             }
-            seenCategories.add(category);
-            const items = itemsByCategory.get(category) || [];
+            seenCategories.add(categoryKey);
+            const items = itemsByCategory.get(categoryKey) || [];
             if (items.length) categories.push({ category, items });
         } catch (error) {
             console.warn(`tabs_order.csv: skipped invalid row ${index + 2}: ${error.message}`);
         }
     });
-
-    mainItems.forEach((item) => {
-        if (seenCategories.has(item.category)) return;
-        seenCategories.add(item.category);
-        categories.push({
-            category: item.category,
-            items: itemsByCategory.get(item.category)
-        });
-    });
-
-    const sectionCategories = groupItems(
-        mainItems.filter((item) => item.categoryFromSection),
-        (item) => item.category
-    ).map(({ name }) => name);
-    if (sectionCategories.length) {
-        categories.sort((left, right) => {
-            const leftIndex = sectionCategories.indexOf(left.category);
-            const rightIndex = sectionCategories.indexOf(right.category);
-            if (leftIndex < 0) return rightIndex < 0 ? 0 : 1;
-            if (rightIndex < 0) return -1;
-            return leftIndex - rightIndex;
-        });
-    }
 
     tabList.replaceChildren();
     menuContent.replaceChildren();
@@ -306,8 +292,8 @@ function renderMenu(tabRows, mainItems, bowlItems) {
         return;
     }
 
-    const visibleCategories = new Set(categories.map(({ category }) => category));
-    const bowlOptionItems = bowlItems.filter((item) => !visibleCategories.has(item.category));
+    const visibleCategories = new Set(categories.map(({ category }) => normalizeCategory(category)));
+    const bowlOptionItems = bowlItems.filter((item) => !visibleCategories.has(normalizeCategory(item.category)));
 
     categories.forEach(({ category, items }, index) => {
         const tabId = `menu-tab-${index}-${slugify(category)}`;
@@ -356,7 +342,7 @@ function renderMenu(tabRows, mainItems, bowlItems) {
         addText(heading, 'h2', '', category);
         panel.append(heading);
         renderGroupedItems(panel, items, (item) => item.subCategory);
-        if (category === 'Bowls') {
+        if (normalizeCategory(category) === 'bowls') {
             renderGroupedItems(panel, bowlOptionItems, (item) => item.category);
         }
         menuContent.append(panel);

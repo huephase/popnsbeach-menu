@@ -77,15 +77,19 @@ Render CSV content as text, never as executable HTML. Restrict image references 
 
 ```csv
 CATEGORY,DESCRIPTION,ACTIVE
-Fresh Blends,This tab covers Fresh Blends,TRUE
-Fresh Juices,This tab covers Fresh Juices,TRUE
+Breakfast,This tab covers Breakfast,TRUE
+Snacks,This tab covers Snacks,TRUE
+Bowls,This tab covers Bowls,TRUE
+Sandwiches,This tab covers Sandwiches,TRUE
+Coffee,This tab covers Coffee,TRUE
+Drinks,This tab covers Drinks,TRUE
 ```
 
 - `CATEGORY` supplies both the matching key and the visible tab label. `DESCRIPTION` is optional supporting text, not the tab label. `ACTIVE` uses the same boolean rules as the menu files; inactive tab rows are ignored.
-- Traverse active tab rows in file order. Match `CATEGORY` against the top-level category in either menu file, using exact, case-sensitive equality after trimming surrounding whitespace.
+- Traverse active tab rows in file order. Match `CATEGORY` against the top-level category in either menu file, ignoring case after trimming surrounding whitespace. Keep the tab row's spelling for its visible label.
 - Skip and ignore any tab category with no matching entries in either menu file. Do not render a placeholder tab or treat this as an error.
 - Only active menu items appear. If a matching category contains no active valid items, omit its tab to avoid an empty panel.
-- When `main_menu.csv` uses category marker rows, its top-level categories are shown first in marker order, even if `tabs_order.csv` has not yet been updated; other matching configured categories follow in tab-file order. Without marker rows, tab order continues to follow `tabs_order.csv`, and unlisted main-menu categories are appended in first-seen CSV order.
+- Eligible tabs follow `tabs_order.csv` order. Categories in the menu files that are not listed in the active tab configuration do not create tabs.
 - Categories in `bowls_menu.csv` that have no active tab are rendered as grouped subsections inside the `Bowls` tab, rather than as additional tabs.
 - Render each category at most once; retain the first active occurrence if the tab file contains duplicate categories and report the duplicate in development diagnostics.
 - Select the first eligible tab initially. Switching tabs displays the corresponding category panel without refetching CSV data or reloading the page.
